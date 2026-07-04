@@ -4,8 +4,13 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 
+/** Local /api proxy target — `npm run dev:api` runs the edge function outside Vercel. */
+const apiProxy = { '/api': 'http://localhost:8787' };
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: { proxy: apiProxy },
+  preview: { proxy: apiProxy },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

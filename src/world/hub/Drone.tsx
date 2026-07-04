@@ -68,10 +68,16 @@ export function Drone() {
 
   return (
     <group ref={group}>
-      {/* body */}
+      {/* body — bright silver so the avatar reads clearly against the dark floor */}
       <mesh castShadow>
         <capsuleGeometry args={[0.28, 0.3, 6, 12]} />
-        <meshStandardMaterial color="#0e1526" metalness={0.7} roughness={0.25} />
+        <meshStandardMaterial
+          color="#d7e2f4"
+          metalness={0.85}
+          roughness={0.3}
+          emissive="#38bdf8"
+          emissiveIntensity={0.35}
+        />
       </mesh>
       {/* glowing eye */}
       <mesh position={[0, 0.08, 0.26]}>
@@ -82,14 +88,19 @@ export function Drone() {
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.32, 0]}>
         <torusGeometry args={[0.45, 0.045, 8, 24]} />
         <meshStandardMaterial
-          color="#1c2438"
+          color="#9fc4e8"
           metalness={0.8}
           roughness={0.3}
           emissive="#22d3ee"
-          emissiveIntensity={0.4}
+          emissiveIntensity={1.2}
         />
       </mesh>
-      <pointLight color="#22d3ee" intensity={6} distance={7} decay={2} position={[0, 0.4, 0]} />
+      {/* halo on the floor so the walker is easy to track from the chase camera */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.38, 0]}>
+        <ringGeometry args={[0.55, 0.8, 32]} />
+        <meshBasicMaterial color="#22d3ee" transparent opacity={0.35} depthWrite={false} />
+      </mesh>
+      <pointLight color="#22d3ee" intensity={8} distance={8} decay={2} position={[0, 0.4, 0]} />
     </group>
   );
 }

@@ -48,10 +48,7 @@ export function NoteOverlay() {
                 <p className="terminal-text mt-4 text-sm leading-relaxed text-ink/85">
                   {note.body}
                 </p>
-                <div className="mt-6 flex items-center justify-between">
-                  <span className="terminal-text text-[10px] text-dim">
-                    source: {note.sourceRefs.join(', ')}
-                  </span>
+                <div className="mt-6 flex justify-end">
                   <Dialog.Close asChild>
                     <button className="rounded-lg bg-gold px-4 py-2 text-sm font-bold text-void transition-transform hover:scale-105">
                       close

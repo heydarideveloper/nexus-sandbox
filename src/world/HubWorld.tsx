@@ -4,6 +4,7 @@ import { AdaptiveDpr, PerformanceMonitor, Stars } from '@react-three/drei';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { useWorldPower } from '@/state/world';
 import { Ground } from './hub/Ground';
+import { CloudRing } from './hub/CloudRing';
 import { Skyline } from './hub/Skyline';
 import { ParticleField } from './hub/ParticleField';
 import { Portals } from './hub/Portals';
@@ -68,6 +69,7 @@ export default function HubWorld() {
           )}
           <Ground />
           <Skyline />
+          {!softwareGL && <CloudRing />}
           {!softwareGL && <ParticleField />}
           <Portals />
           <Terminals />

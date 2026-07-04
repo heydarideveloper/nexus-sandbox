@@ -6,6 +6,7 @@
   "description": "Nexus Sandbox — an explorable, AI-native digital twin of Mohammad Heydari",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node scripts/dev-api.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
