@@ -52,3 +52,18 @@ Production output (gzip):
 - Consider self-hosting the two font families to remove the third-party request entirely.
 - `unused-javascript` flags ~300 KB (ungzipped) of vendor code on `/os`; splitting framer-motion
   out of the `/os` path is a possible micro-win.
+
+## Mobile frame-time methodology (v1.1 adaptation)
+
+Added 2026-07-05 with ADR-008:
+
+| Signal | Method |
+| ------ | ------ |
+| Tier selection | Static probe at init (`capability.ts`) → `ultra/high/medium/low/battery` |
+| Runtime governor | Rolling 60-frame average in `FrameGovernor`; degrade after ~45 bad frames (>115% budget), recover after ~180 good frames (<85% budget) |
+| Budgets | 16.7 ms (60 fps) for ultra/high/medium; 33.3 ms (30 fps) for low/battery |
+| Hub pause | `frameloop="never"` when district overlay, chat, or engineering note is open |
+| Validation | Playwright Pixel 7 + iPad projects; dev overlay via `?perf=1` (FPS, avg/p95 frame time, tier, device profile, JS heap) |
+
+Expected wins on phone: hub pause behind overlays (largest), tier-gated stars/particles/bloom,
+progressive effect mount, DPR cap 1.0–1.25 on low tiers.

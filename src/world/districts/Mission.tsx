@@ -19,7 +19,7 @@ export default function Mission() {
         <p className="terminal-text text-[11px] tracking-[0.3em] text-gold uppercase">
           mission status
         </p>
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-6">
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
           <Stat label="world power" value={`${power}%`} />
           <Stat label="achievements" value={`${unlocked.length}/${content.achievements.length}`} />
           <Stat label="hidden terminals" value={`${terminals}/5`} />

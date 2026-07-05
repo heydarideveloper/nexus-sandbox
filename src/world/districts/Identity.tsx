@@ -38,7 +38,7 @@ export default function Identity() {
             <p className="terminal-text text-[11px] tracking-[0.35em] text-neon uppercase">
               identity verified
             </p>
-            <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink sm:text-5xl">
               {profile.name}
             </h2>
             <p className="mt-2 text-base text-dim">{profile.headline}</p>

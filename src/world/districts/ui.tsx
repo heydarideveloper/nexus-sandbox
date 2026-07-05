@@ -48,7 +48,7 @@ export function Card({ children, accent }: { children: ReactNode; accent?: strin
 }
 
 export function DistrictBody({ children }: { children: ReactNode }) {
-  return <div className="mx-auto w-full max-w-4xl px-5 py-6 sm:px-8">{children}</div>;
+  return <div className="mx-auto w-full max-w-4xl px-4 py-4 sm:px-8 sm:py-6">{children}</div>;
 }
 
 export function Bar({ value, color }: { value: number; color: string }) {

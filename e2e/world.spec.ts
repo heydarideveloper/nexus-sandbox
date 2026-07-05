@@ -100,7 +100,7 @@ test('innovation lab opens Jackpot with the live slots demo', async ({ page }) =
 test('chat twin answers from evidence without any API (local fallback)', async ({ page }) => {
   await page.getByRole('button', { name: /skip/i }).click();
   await page.getByRole('button', { name: /free roam/i }).click();
-  await page.getByRole('button', { name: /talk to my twin/i }).click();
+  await page.getByRole('button', { name: /talk to my twin|^chat$/i }).click();
   const dialog = page.getByRole('dialog', { name: /talk with mohammad/i });
   await expect(dialog).toBeVisible();
   await dialog.getByRole('textbox', { name: /your question/i }).fill('Tell me about Portal');
@@ -111,7 +111,7 @@ test('chat twin answers from evidence without any API (local fallback)', async (
 test('chat twin refuses questions with no evidence', async ({ page }) => {
   await page.getByRole('button', { name: /skip/i }).click();
   await page.getByRole('button', { name: /free roam/i }).click();
-  await page.getByRole('button', { name: /talk to my twin/i }).click();
+  await page.getByRole('button', { name: /talk to my twin|^chat$/i }).click();
   const dialog = page.getByRole('dialog', { name: /talk with mohammad/i });
   await dialog
     .getByRole('textbox', { name: /your question/i })

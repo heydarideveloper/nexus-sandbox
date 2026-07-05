@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useScreenClass } from '@/engine/quality';
 import { DistrictBody } from './ui';
 
 interface ArchNode {
@@ -252,10 +253,11 @@ export default function Factory() {
   const [systemId, setSystemId] = useState(SYSTEMS[0]!.id);
   const [selected, setSelected] = useState<ArchNode | null>(null);
   const system = useMemo(() => SYSTEMS.find((s) => s.id === systemId)!, [systemId]);
+  const compact = useScreenClass() === 'phone';
 
   return (
     <DistrictBody>
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
         {SYSTEMS.map((s) => (
           <button
             key={s.id}
@@ -263,7 +265,7 @@ export default function Factory() {
               setSystemId(s.id);
               setSelected(null);
             }}
-            className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+            className={`touch-target w-full rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition-colors sm:w-auto sm:py-1.5 ${
               s.id === systemId
                 ? 'border-indigo bg-indigo/15 text-ink'
                 : 'border-line text-dim hover:text-ink'
@@ -273,12 +275,13 @@ export default function Factory() {
           </button>
         ))}
       </div>
-      <p className="mb-4 text-sm text-dim">{system.description}</p>
+      <p className="mb-4 text-sm leading-relaxed text-dim">{system.description}</p>
 
-      <div className="glass relative overflow-hidden rounded-2xl">
+      <div className="glass overflow-x-auto rounded-2xl">
         <svg
           viewBox="0 0 100 100"
-          className="h-[52vh] min-h-[320px] w-full"
+          preserveAspectRatio="xMidYMid meet"
+          className="h-[min(58dvh,440px)] min-h-[280px] w-full min-w-[320px]"
           role="img"
           aria-label={`${system.name} live architecture diagram`}
         >
@@ -321,6 +324,7 @@ export default function Factory() {
               role="button"
               aria-label={`${n.label} — click for detail`}
             >
+              <circle cx={n.x} cy={n.y} r="6" fill="transparent" pointerEvents="all" />
               <motion.circle
                 cx={n.x}
                 cy={n.y}
@@ -332,16 +336,18 @@ export default function Factory() {
                 transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
               <circle cx={n.x} cy={n.y} r="1.1" fill={n.color} />
-              <text
-                x={n.x}
-                y={n.y + 6.4}
-                textAnchor="middle"
-                fill={selected?.id === n.id ? n.color : '#8b98b3'}
-                fontSize="2.5"
-                fontFamily="JetBrains Mono, monospace"
-              >
-                {n.label}
-              </text>
+              {!compact && (
+                <text
+                  x={n.x}
+                  y={n.y + 6.4}
+                  textAnchor="middle"
+                  fill={selected?.id === n.id ? n.color : '#8b98b3'}
+                  fontSize="2.5"
+                  fontFamily="JetBrains Mono, monospace"
+                >
+                  {n.label}
+                </text>
+              )}
             </g>
           ))}
         </svg>
@@ -368,7 +374,7 @@ export default function Factory() {
             animate={{ opacity: 1 }}
             className="terminal-text mt-3 text-center text-[11px] text-dim"
           >
-            click any node — every component has a story
+            {compact ? 'tap any node — labels appear below' : 'click any node — every component has a story'}
           </motion.p>
         )}
       </AnimatePresence>

@@ -20,7 +20,7 @@ export function Toasts() {
 
   return (
     <div
-      className="no-print pointer-events-none absolute right-3 bottom-20 z-40 flex w-[min(88vw,20rem)] flex-col gap-2"
+      className="no-print pointer-events-none absolute z-40 flex w-[min(88vw,20rem)] flex-col gap-2 max-sm:left-3 max-sm:right-3 max-sm:bottom-[calc(8.25rem+env(safe-area-inset-bottom))] sm:right-3 sm:bottom-20"
       role="log"
       aria-live="polite"
     >

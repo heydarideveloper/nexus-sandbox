@@ -20,10 +20,10 @@ const registry: Record<string, LazyExoticComponent<ComponentType>> = {
 export function DistrictOverlay() {
   const activeDistrict = useWorld((s) => s.activeDistrict);
   const closeDistrict = useWorld((s) => s.closeDistrict);
+  const guidedFooter = useWorld((s) => s.mode === 'guided' && s.tourIndex >= 0);
   const district = content.districts.find((d) => d.id === activeDistrict);
   const Component = activeDistrict ? registry[activeDistrict] : undefined;
 
-  // Belt-and-braces escape handling: guarantee close even if focus sits outside the Radix layer.
   useEffect(() => {
     if (!activeDistrict) return;
     const onKey = (e: KeyboardEvent) => {
@@ -36,8 +36,6 @@ export function DistrictOverlay() {
     return () => window.removeEventListener('keydown', onKey);
   }, [activeDistrict, closeDistrict]);
 
-  // No exit animation on purpose: closing must be instant even when the main thread is
-  // busy with WebGL work — determinism beats a 200 ms fade (principle #1).
   return (
     <>
       {district && Component && (
@@ -64,35 +62,43 @@ export function DistrictOverlay() {
               aria-describedby={undefined}
             >
               <motion.div
-                className="glass fixed inset-3 z-50 flex flex-col overflow-hidden rounded-2xl sm:inset-6 lg:inset-10"
-                initial={{ opacity: 0, scale: 0.96, y: 16 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="glass fixed inset-x-0 bottom-0 top-[env(safe-area-inset-top,0px)] z-50 flex flex-col overflow-hidden rounded-t-2xl sm:inset-6 sm:rounded-2xl lg:inset-10"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 style={{ borderTop: `2px solid ${district.accent}` }}
               >
-                <header className="flex items-center justify-between gap-4 border-b border-line px-5 py-3 sm:px-8">
-                  <div>
-                    <Dialog.Title className="text-lg font-extrabold text-ink sm:text-xl">
+                <header className="flex shrink-0 items-start justify-between gap-3 border-b border-line px-4 py-3 sm:items-center sm:px-8">
+                  <div className="min-w-0 flex-1">
+                    <Dialog.Title className="text-base font-extrabold text-ink sm:text-xl">
                       {district.name}
                     </Dialog.Title>
-                    <p className="terminal-text text-[11px] text-dim">{district.tagline}</p>
+                    <p className="terminal-text mt-0.5 line-clamp-2 text-[10px] text-dim sm:text-[11px]">
+                      {district.tagline}
+                    </p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <TourAdvance />
+                  <div className="flex shrink-0 items-center gap-2">
+                    <div className="hidden sm:block">
+                      <TourAdvance />
+                    </div>
                     <Dialog.Close asChild>
                       <button
-                        className="rounded-lg border border-line px-3 py-1.5 text-sm text-dim transition-colors hover:border-rose hover:text-rose"
+                        className="touch-target flex h-11 w-11 items-center justify-center rounded-xl border border-line text-lg text-dim transition-colors active:border-rose active:text-rose sm:h-auto sm:w-auto sm:rounded-lg sm:px-3 sm:py-2 sm:text-sm"
                         aria-label={`Close ${district.name}`}
                       >
-                        esc ✕
+                        <span className="sm:hidden" aria-hidden>
+                          ✕
+                        </span>
+                        <span className="hidden sm:inline">esc ✕</span>
                       </button>
                     </Dialog.Close>
                   </div>
                 </header>
-                <div className="district-scroll flex-1 overflow-y-auto">
+
+                <div className="district-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain">
                   <Suspense
                     fallback={
-                      <div className="terminal-text flex h-full items-center justify-center text-sm text-dim">
+                      <div className="terminal-text flex h-40 items-center justify-center text-sm text-dim">
                         loading district...
                       </div>
                     }
@@ -100,6 +106,15 @@ export function DistrictOverlay() {
                     <Component />
                   </Suspense>
                 </div>
+
+                {guidedFooter && (
+                  <footer
+                    className="shrink-0 border-t border-line bg-panel/90 px-4 py-3 sm:hidden"
+                    style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+                  >
+                    <TourAdvance mobileFooter />
+                  </footer>
+                )}
               </motion.div>
             </Dialog.Content>
           </Dialog.Portal>

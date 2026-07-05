@@ -83,11 +83,11 @@ function Pipeline({
       </div>
       <p className="mt-1.5 text-xs text-dim">{description}</p>
 
-      <ol className="mt-3 flex flex-wrap items-center gap-1.5" aria-label={`${name} stages`}>
+      <ol className="mt-3 flex flex-col items-stretch gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-1.5" aria-label={`${name} stages`}>
         {stages.map((stage, i) => (
-          <li key={stage} className="flex items-center gap-1.5">
+          <li key={stage} className="flex flex-col items-stretch gap-1 sm:flex-row sm:items-center sm:gap-1.5">
             <span
-              className={`terminal-text rounded-md border px-2 py-1 text-[10px] transition-all duration-300 ${
+              className={`terminal-text rounded-md border px-2.5 py-2 text-[10px] transition-all duration-300 sm:px-2 sm:py-1 ${
                 i < active
                   ? 'border-emerald/60 text-emerald'
                   : i === active
@@ -99,12 +99,17 @@ function Pipeline({
               {stage}
             </span>
             {i < stages.length - 1 && (
-              <span
-                className={`text-[10px] ${i < active ? 'text-emerald' : 'text-line'}`}
-                aria-hidden
-              >
-                →
-              </span>
+              <>
+                <span
+                  className={`hidden text-center text-[10px] sm:inline ${i < active ? 'text-emerald' : 'text-line'}`}
+                  aria-hidden
+                >
+                  →
+                </span>
+                <span className="text-center text-[10px] text-line sm:hidden" aria-hidden>
+                  ↓
+                </span>
+              </>
             )}
           </li>
         ))}

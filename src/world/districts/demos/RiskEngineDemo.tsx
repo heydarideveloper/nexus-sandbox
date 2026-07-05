@@ -59,11 +59,11 @@ export function RiskEngineDemo() {
 
   return (
     <div className="rounded-xl border border-line bg-void/60 p-4">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <span className="terminal-text text-[11px] text-indigo uppercase">
           live demo — parallel risk computation
         </span>
-        <label className="terminal-text flex cursor-pointer items-center gap-1.5 text-[11px] text-dim">
+        <label className="terminal-text flex cursor-pointer items-center gap-2 text-[11px] text-dim">
           <input
             type="checkbox"
             checked={chaos}
@@ -74,7 +74,7 @@ export function RiskEngineDemo() {
         </label>
       </div>
 
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-5 sm:gap-1.5">
         {CORES.map((name, i) => (
           <div
             key={name}
@@ -106,11 +106,11 @@ export function RiskEngineDemo() {
       </div>
 
       {/* orchestrator */}
-      <div className="mt-3 flex items-center justify-between rounded-lg border border-line bg-panel p-3">
+      <div className="mt-3 flex flex-col gap-2 rounded-lg border border-line bg-panel p-3 sm:flex-row sm:items-center sm:justify-between">
         <span className="terminal-text text-[11px] text-dim">
           central orchestrator → normalized score
         </span>
-        <span className="text-xl font-extrabold text-indigo">
+        <span className="text-2xl font-extrabold text-indigo sm:text-xl">
           {finalScore !== null ? `${finalScore}/100` : running ? '…' : '—'}
         </span>
       </div>
@@ -123,7 +123,7 @@ export function RiskEngineDemo() {
       <button
         onClick={run}
         disabled={running}
-        className="mt-3 w-full rounded-lg bg-indigo py-2 text-sm font-bold text-void transition-transform enabled:hover:scale-[1.02] disabled:opacity-40"
+        className="touch-target mt-3 w-full rounded-lg bg-indigo py-3 text-sm font-bold text-void transition-transform enabled:active:scale-[0.98] disabled:opacity-40 sm:py-2"
       >
         {running ? 'evaluating in parallel…' : 'evaluate a transaction'}
       </button>

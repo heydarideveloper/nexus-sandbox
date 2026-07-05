@@ -53,7 +53,7 @@ export default function Lab() {
                 </span>
               ))}
             </div>
-            <div className="terminal-text mt-3 text-[11px] text-amber opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="terminal-text mt-3 text-[11px] text-amber opacity-100 sm:opacity-0 sm:transition-opacity sm:group-hover:opacity-100">
               {p.demo !== 'none' ? '▸ open container — live demo inside' : '▸ open container'}
             </div>
           </motion.button>
@@ -67,29 +67,31 @@ export default function Lab() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-void/80 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] flex items-end bg-void/80 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4"
             onClick={() => setOpenId(null)}
           >
             <motion.div
               role="dialog"
               aria-modal="true"
               aria-label={`${open.name} details`}
-              initial={{ scale: 0.94, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.96, y: 12 }}
-              className="glass district-scroll max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-2xl border-t-2 border-t-amber p-6 sm:p-8"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+              className="glass district-scroll max-h-[min(92dvh,100%)] w-full max-w-3xl overflow-y-auto rounded-t-2xl border-t-2 border-t-amber p-4 sm:max-h-[min(88dvh,100%)] sm:rounded-2xl sm:p-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-2xl font-extrabold text-ink">{open.name}</h3>
+              <div className="sticky top-0 z-10 -mx-4 mb-3 flex items-start justify-between gap-3 border-b border-line bg-panel/95 px-4 pb-3 backdrop-blur-sm sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-xl font-extrabold text-ink sm:text-2xl">{open.name}</h3>
                   <p className="terminal-text text-xs text-amber">
                     {open.period} · {open.role}
                   </p>
                 </div>
                 <button
-                  className="rounded-lg border border-line px-3 py-1.5 text-sm text-dim hover:border-rose hover:text-rose"
+                  className="touch-target flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line text-lg text-dim active:border-rose active:text-rose"
                   onClick={() => setOpenId(null)}
+                  aria-label={`Close ${open.name}`}
                 >
                   ✕
                 </button>

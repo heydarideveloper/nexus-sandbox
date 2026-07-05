@@ -79,7 +79,7 @@ export function SlotsDemo() {
       <button
         onClick={spin}
         disabled={spinning || balance < 10}
-        className="w-full rounded-lg bg-amber py-2 text-sm font-bold text-void transition-transform enabled:hover:scale-[1.02] disabled:opacity-40"
+        className="touch-target w-full rounded-lg bg-amber py-3 text-sm font-bold text-void transition-transform enabled:active:scale-[0.98] disabled:opacity-40 sm:py-2"
       >
         {balance < 10
           ? 'out of credits — refresh to reset'

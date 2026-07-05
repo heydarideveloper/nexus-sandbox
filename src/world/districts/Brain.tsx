@@ -1,10 +1,11 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, OrbitControls } from '@react-three/drei';
 import { BufferGeometry, Color, Float32BufferAttribute, LineSegments, Mesh } from 'three';
 import { forceCenter, forceLink, forceManyBody, forceSimulation, type SimNode } from 'd3-force-3d';
 import { AnimatePresence, motion } from 'framer-motion';
 import { content, type SkillNode, type SkillStatus } from '@/content';
+import { useCoarsePointer, useQuality } from '@/engine/quality';
 import { Bar, Card, Chip } from './ui';
 
 const STATUS_COLOR: Record<SkillStatus, string> = {
@@ -21,6 +22,8 @@ interface GraphNode extends SimNode {
 
 export default function Brain() {
   const [selected, setSelected] = useState<SkillNode | null>(null);
+  const reducedMotion = useQuality((s) => s.profile.reducedMotion);
+  const coarse = useCoarsePointer();
 
   return (
     <div className="relative flex h-full min-h-[70vh] flex-col lg:flex-row">
@@ -34,12 +37,14 @@ export default function Brain() {
             enablePan={false}
             minDistance={12}
             maxDistance={45}
-            autoRotate
+            autoRotate={!reducedMotion}
             autoRotateSpeed={0.4}
+            rotateSpeed={coarse ? 0.65 : 0.4}
+            touches={{ ONE: 0, TWO: 2 }}
           />
         </Canvas>
         <div className="terminal-text pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-line bg-panel/80 px-3 py-1 text-[10px] whitespace-nowrap text-dim">
-          drag to rotate · click a node for evidence
+          {coarse ? 'drag to rotate · tap a node for evidence' : 'drag to rotate · click a node for evidence'}
         </div>
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           {(Object.keys(STATUS_COLOR) as SkillStatus[]).map((s) => (
@@ -113,7 +118,7 @@ export default function Brain() {
             key="empty"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="hidden w-96 shrink-0 flex-col items-center justify-center border-l border-line p-8 text-center lg:flex"
+            className="flex w-full shrink-0 flex-col items-center justify-center border-t border-line p-6 text-center lg:w-96 lg:border-t-0 lg:border-l lg:p-8"
           >
             <p className="text-4xl" aria-hidden>
               🧠
@@ -136,8 +141,6 @@ function Graph({
   onSelect: (s: SkillNode) => void;
   selectedId: string | null;
 }) {
-  const lines = useRef<LineSegments>(null);
-
   const { nodes, links, sim } = useMemo(() => {
     // Deterministic initial scatter (hash of index): pure under React rules and the
     // force simulation converges to the same layout every visit.
@@ -179,6 +182,15 @@ function Graph({
     g.setAttribute('position', new Float32BufferAttribute(linePositions, 3));
     return g;
   }, [linePositions]);
+
+  const lines = useRef<LineSegments>(null);
+
+  useEffect(() => {
+    return () => {
+      sim.stop();
+      lineGeometry.dispose();
+    };
+  }, [sim, lineGeometry]);
 
   useFrame(() => {
     if (sim.alpha() > 0.005) sim.tick();

@@ -23,6 +23,36 @@ html,
 body,
 #root {
   height: 100%;
+  height: 100dvh;
+}
+
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+.safe-x {
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+}
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@media (hover: hover) {
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
 }
 
 body {

@@ -1,8 +1,7 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { CanvasTexture, Group, NormalBlending } from 'three';
-
-const PUFF_COUNT = 42;
+import { useQuality } from '@/engine/quality';
 
 /** Deterministic pseudo-random in [0, 1) — pure under React rules, same sky every visit. */
 function hash(i: number, axis: number): number {
@@ -30,14 +29,17 @@ function makePuffTexture(): CanvasTexture {
  * A drifting ring of cloud puffs surrounding the plaza, so the walkable circle reads as a
  * platform floating in the sky. Sits just outside the boundary wall (PLAZA_RADIUS = 30).
  */
-export function CloudRing() {
+export function CloudRing({ count = 42 }: { count?: number }) {
   const group = useRef<Group>(null);
   const texture = useMemo(() => makePuffTexture(), []);
+  const reducedMotion = useQuality((s) => s.profile.reducedMotion);
+
+  useEffect(() => () => texture.dispose(), [texture]);
 
   const puffs = useMemo(
     () =>
-      Array.from({ length: PUFF_COUNT }, (_, i) => {
-        const angle = (i / PUFF_COUNT) * Math.PI * 2 + hash(i, 1) * 0.4;
+      Array.from({ length: count }, (_, i) => {
+        const angle = (i / Math.max(count, 1)) * Math.PI * 2 + hash(i, 1) * 0.4;
         const radius = 33 + hash(i, 2) * 12;
         return {
           position: [
@@ -49,12 +51,12 @@ export function CloudRing() {
           opacity: 0.35 + hash(i, 5) * 0.3,
         };
       }),
-    [],
+    [count],
   );
 
   useFrame((state) => {
     const g = group.current;
-    if (!g) return;
+    if (!g || reducedMotion) return;
     g.rotation.y = state.clock.elapsedTime * 0.012;
   });
 

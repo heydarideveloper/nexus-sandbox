@@ -87,7 +87,7 @@ export function FsrsDemo() {
           <button
             key={grade}
             onClick={() => review(grade)}
-            className={`${cls} rounded-lg py-2 text-xs font-bold text-void transition-transform hover:scale-[1.03]`}
+            className={`${cls} touch-target rounded-lg py-3 text-xs font-bold text-void transition-transform active:scale-[0.98] sm:py-2`}
             title={hint}
           >
             {grade.toUpperCase()}

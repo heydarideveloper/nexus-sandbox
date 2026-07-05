@@ -3,10 +3,20 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { content } from '@/content';
 import { TOUR_ORDER, useWorld, useWorldPower } from '@/state/world';
+import { useCoarsePointer, useQuality, type QualityTier } from '@/engine/quality';
 import { setAmbientPower, sfx, startAmbient, stopAmbient } from '@/audio/engine';
+import { QuickTravelDock } from './QuickTravelDock';
+
+const TIER_LABELS: QualityTier[] = ['ultra', 'high', 'medium', 'low', 'battery'];
 
 export function Hud() {
   const power = useWorldPower();
+  const coarse = useCoarsePointer();
+  const init = useQuality((s) => s.init);
+  const flags = useQuality((s) => s.flags);
+  const setManualTier = useQuality((s) => s.setManualTier);
+  const setBatterySaver = useQuality((s) => s.setBatterySaver);
+  const profile = useQuality((s) => s.profile);
   const {
     mode,
     tourIndex,
@@ -19,8 +29,11 @@ export function Hud() {
     chatOpen,
     exitTour,
     openDistrict,
-    setFlyTarget,
   } = useWorld();
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   useEffect(() => {
     if (audioOn) startAmbient(power);
@@ -34,18 +47,25 @@ export function Hud() {
   const tourStop = tourIndex >= 0 ? TOUR_ORDER[tourIndex] : null;
   const tourDistrict = tourStop ? content.districts.find((d) => d.id === tourStop) : null;
 
+  const hintCopy = coarse
+    ? 'tap ground to fly · use the joystick · tap a beacon to enter'
+    : 'click a beacon to enter · WASD / arrows to fly the drone';
+
   return (
     <>
-      {/* Top bar */}
-      <div className="no-print pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between gap-3 p-3 sm:p-4">
-        <div className="pointer-events-auto flex flex-col gap-2">
-          <div className="glass flex items-center gap-3 rounded-xl px-4 py-2.5">
-            <div>
+      <div className="no-print pointer-events-none absolute inset-x-0 top-0 z-30 flex items-start justify-between gap-2 safe-top safe-x sm:gap-3 sm:p-4 p-2">
+        <div className="pointer-events-auto flex min-w-0 flex-1 flex-col gap-2">
+          <div className="glass flex items-center gap-2 rounded-xl px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5">
+            <div className="min-w-0 sm:hidden">
+              <div className="truncate text-xs font-bold text-ink">{content.profile.name}</div>
+              <div className="terminal-text text-[9px] text-dim">NEXUS · {power}% power</div>
+            </div>
+            <div className="hidden sm:block">
               <div className="text-sm leading-tight font-bold text-ink">{content.profile.name}</div>
               <div className="terminal-text text-[10px] text-dim">NEXUS SANDBOX · digital twin</div>
             </div>
-            <div className="ml-2 h-8 w-px bg-line" aria-hidden />
-            <div>
+            <div className="ml-auto hidden h-8 w-px bg-line sm:block" aria-hidden />
+            <div className="hidden sm:block">
               <div className="terminal-text text-[10px] text-dim uppercase">world power</div>
               <div className="flex items-center gap-2">
                 <div
@@ -65,75 +85,93 @@ export function Hud() {
                 <span className="terminal-text text-xs text-neon">{power}%</span>
               </div>
             </div>
+            <div
+              className="h-1.5 w-16 overflow-hidden rounded-full bg-line sm:hidden"
+              role="progressbar"
+              aria-valuenow={power}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="World power"
+            >
+              <motion.div
+                className="h-full rounded-full bg-neon"
+                animate={{ width: `${power}%` }}
+                transition={{ type: 'spring', stiffness: 60, damping: 20 }}
+              />
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-1.5">
-            <span className="hud-chip">
+            <span className="hud-chip text-[10px] sm:text-[0.72rem]">
               🏆 {unlockedAchievements.length}/{content.achievements.length}
             </span>
-            <span className="hud-chip">🖥 terminals {terminalsFound.length}/5</span>
-            <span className="hud-chip">
-              📍 {visited.length}/{content.districts.length} districts
+            <span className="hud-chip text-[10px] sm:text-[0.72rem]">
+              🖥 {terminalsFound.length}/5
             </span>
+            <span className="hud-chip text-[10px] sm:text-[0.72rem]">
+              📍 {visited.length}/{content.districts.length}
+            </span>
+            <span className="hud-chip hidden text-[10px] lg:inline-flex">{flags.tier} tier</span>
           </div>
         </div>
 
-        <div className="pointer-events-auto flex items-center gap-2">
-          <button
-            className="glass rounded-xl px-3 py-2.5 text-sm text-dim transition-colors hover:text-neon"
-            onClick={() => {
-              toggleAudio();
-              sfx.open();
-            }}
-            aria-pressed={audioOn}
-            aria-label={audioOn ? 'Mute soundscape' : 'Enable soundscape'}
-            title={audioOn ? 'Mute soundscape' : 'Enable soundscape'}
-          >
-            {audioOn ? '🔊' : '🔇'}
-          </button>
-          <button
-            className="glass rounded-xl px-4 py-2.5 text-sm font-semibold text-neon transition-transform hover:-translate-y-0.5"
-            onClick={() => setChatOpen(!chatOpen)}
-          >
-            Talk to my twin
-          </button>
-          <Link
-            to="/os"
-            className="glass terminal-text hidden rounded-xl px-3 py-2.5 text-xs text-dim transition-colors hover:text-ink sm:block"
-            title="Accessible text view — same content, no WebGL"
-          >
-            /os
-          </Link>
+        <div className="pointer-events-auto flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center">
+          <div className="hidden items-center gap-1 sm:flex">
+            <select
+              className="glass terminal-text touch-target rounded-xl px-2 text-[10px] text-dim"
+              aria-label="Graphics quality"
+              value={flags.tier}
+              onChange={(e) => setManualTier(e.target.value as QualityTier)}
+            >
+              {TIER_LABELS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            <button
+              className={`glass touch-target rounded-xl px-2 text-[10px] ${profile.batterySaver ? 'text-neon' : 'text-dim'}`}
+              onClick={() => setBatterySaver(!profile.batterySaver)}
+              aria-pressed={profile.batterySaver}
+            >
+              🔋
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              className="glass touch-target rounded-xl px-3 py-2.5 text-sm text-dim transition-colors hover:text-neon"
+              onClick={() => {
+                toggleAudio();
+                sfx.open();
+              }}
+              aria-pressed={audioOn}
+              aria-label={audioOn ? 'Mute soundscape' : 'Enable soundscape'}
+              title={audioOn ? 'Mute soundscape' : 'Enable soundscape'}
+            >
+              {audioOn ? '🔊' : '🔇'}
+            </button>
+            <button
+              className="glass touch-target rounded-xl px-4 py-2.5 text-sm font-semibold text-neon transition-transform hover:-translate-y-0.5"
+              onClick={() => setChatOpen(!chatOpen)}
+            >
+              <span className="hidden sm:inline">Talk to my twin</span>
+              <span className="sm:hidden">Chat</span>
+            </button>
+            <Link
+              to="/os"
+              className="glass terminal-text touch-target rounded-xl px-3 py-2.5 text-xs text-dim transition-colors hover:text-ink"
+              title="Accessible text view — same content, no WebGL"
+            >
+              /os
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Quick travel dock */}
-      <nav
-        className="no-print pointer-events-auto absolute bottom-3 left-1/2 z-30 flex max-w-[96vw] -translate-x-1/2 gap-1 overflow-x-auto rounded-2xl p-1.5 glass"
-        aria-label="District quick travel"
-      >
-        {content.districts.map((d) => (
-          <button
-            key={d.id}
-            onClick={() => {
-              setFlyTarget(d.position);
-              openDistrict(d.id);
-              sfx.open();
-            }}
-            onMouseEnter={() => sfx.hover()}
-            className={`terminal-text rounded-xl px-3 py-2 text-[11px] whitespace-nowrap transition-colors ${
-              visited.includes(d.id) ? 'text-ink' : 'text-dim'
-            } hover:bg-line/60`}
-            style={{ boxShadow: visited.includes(d.id) ? `inset 0 -2px 0 ${d.accent}` : undefined }}
-          >
-            {d.name}
-          </button>
-        ))}
-      </nav>
+      <QuickTravelDock />
 
-      {/* Guided tour banner */}
       {mode === 'guided' && tourDistrict && (
-        <div className="no-print absolute top-24 left-1/2 z-30 w-[min(92vw,30rem)] -translate-x-1/2 sm:top-20">
+        <div className="no-print absolute top-[calc(4.5rem+env(safe-area-inset-top))] left-1/2 z-30 w-[min(92vw,30rem)] -translate-x-1/2 sm:top-20">
           <div className="glass flex items-center justify-between gap-3 rounded-2xl px-4 py-3">
             <div>
               <div className="terminal-text text-[10px] text-neon uppercase">
@@ -144,7 +182,7 @@ export function Hud() {
             </div>
             <div className="flex shrink-0 flex-col gap-1.5">
               <button
-                className="rounded-lg bg-neon px-3 py-1.5 text-xs font-bold text-void transition-transform hover:scale-105"
+                className="touch-target rounded-lg bg-neon px-3 py-1.5 text-xs font-bold text-void transition-transform hover:scale-105"
                 onClick={() => {
                   openDistrict(tourDistrict.id);
                   sfx.open();
@@ -152,7 +190,7 @@ export function Hud() {
               >
                 Enter
               </button>
-              <button className="text-[10px] text-dim hover:text-ink" onClick={exitTour}>
+              <button className="touch-target text-[10px] text-dim hover:text-ink" onClick={exitTour}>
                 exit tour
               </button>
             </div>
@@ -160,14 +198,17 @@ export function Hud() {
         </div>
       )}
 
-      {/* Post-district tour advance handled in overlay; hint bar */}
       {mode === 'explorer' && visited.length === 0 && (
-        <div className="no-print terminal-text absolute bottom-20 left-1/2 z-20 -translate-x-1/2 rounded-full border border-line bg-panel/70 px-4 py-1.5 text-[11px] text-dim">
-          drag to orbit · click a beacon to enter · WASD / arrows to fly the drone
+        <div className="no-print terminal-text pointer-events-none absolute left-1/2 z-20 max-w-[92vw] -translate-x-1/2 rounded-full border border-line bg-panel/70 px-4 py-1.5 text-center text-[10px] text-dim sm:text-[11px]"
+          style={{ bottom: 'calc(7.25rem + env(safe-area-inset-bottom))' }}
+        >
+          {hintCopy}
         </div>
       )}
       {mode === 'guided' && tourIndex === 0 && visited.length === 0 && (
-        <div className="no-print terminal-text absolute bottom-20 left-1/2 z-20 -translate-x-1/2 rounded-full border border-line bg-panel/70 px-4 py-1.5 text-[11px] text-dim">
+        <div className="no-print terminal-text pointer-events-none absolute left-1/2 z-20 max-w-[92vw] -translate-x-1/2 rounded-full border border-line bg-panel/70 px-4 py-1.5 text-center text-[10px] text-dim sm:text-[11px]"
+          style={{ bottom: 'calc(7.25rem + env(safe-area-inset-bottom))' }}
+        >
           the drone is flying to your first stop — press Enter when it arrives
         </div>
       )}
@@ -176,20 +217,39 @@ export function Hud() {
 }
 
 /** Tour continuation control shown inside district overlays while guided. */
-export function TourAdvance() {
+export function TourAdvance({ mobileFooter = false }: { mobileFooter?: boolean }) {
   const { mode, tourIndex, advanceTour, closeDistrict } = useWorld();
   if (mode !== 'guided' || tourIndex < 0) return null;
   const last = tourIndex >= TOUR_ORDER.length - 1;
+  const label = last ? 'Finish tour' : 'Next stop →';
+
+  if (mobileFooter) {
+    return (
+      <button
+        type="button"
+        className="touch-target w-full rounded-xl bg-neon px-4 py-3.5 text-base font-bold text-void shadow-[0_0_28px_-6px_#22d3ee] transition-transform active:scale-[0.98]"
+        onClick={() => {
+          sfx.open();
+          if (last) closeDistrict();
+          advanceTour();
+        }}
+      >
+        {label}
+      </button>
+    );
+  }
+
   return (
     <button
-      className="rounded-xl bg-neon px-4 py-2 text-sm font-bold text-void transition-transform hover:scale-105"
+      type="button"
+      className="touch-target rounded-xl bg-neon px-4 py-2 text-sm font-bold text-void transition-transform hover:scale-105"
       onClick={() => {
         sfx.open();
         if (last) closeDistrict();
         advanceTour();
       }}
     >
-      {last ? 'Finish tour' : 'Next stop →'}
+      {label}
     </button>
   );
 }

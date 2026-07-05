@@ -39,7 +39,7 @@ export default function ChatDrone() {
     <motion.aside
       initial={{ opacity: 0, x: 60 }}
       animate={{ opacity: 1, x: 0 }}
-      className="glass no-print fixed top-16 right-3 bottom-16 z-40 flex w-[min(94vw,24rem)] flex-col overflow-hidden rounded-2xl border-t-2 border-t-neon"
+      className="glass no-print fixed z-40 flex flex-col overflow-hidden rounded-2xl border-t-2 border-t-neon max-sm:inset-x-0 max-sm:bottom-0 max-sm:top-auto max-sm:max-h-[min(88dvh,100%)] max-sm:w-full max-sm:rounded-b-none sm:top-16 sm:right-3 sm:bottom-16 sm:w-[min(94vw,24rem)]"
       role="dialog"
       aria-label="Talk with Mohammad's digital twin"
     >
@@ -61,7 +61,7 @@ export default function ChatDrone() {
           </div>
         </div>
         <button
-          className="rounded-lg border border-line px-2.5 py-1 text-xs text-dim hover:border-rose hover:text-rose"
+          className="touch-target rounded-lg border border-line px-3 py-2 text-sm text-dim hover:border-rose hover:text-rose"
           onClick={() => {
             sfx.close();
             setChatOpen(false);

@@ -2,6 +2,30 @@
 
 All notable changes to Nexus Sandbox. Format follows Keep a Changelog; versions follow SemVer.
 
+## [0.2.0] — 2026-07-05
+
+Mobile & tablet adaptation layer (desktop v1 unchanged in gameplay and progression). See
+`docs/adr/ADR-008-mobile-adaptation.md`.
+
+### Added
+
+- Device capability probe and quality tier store (`ultra` → `battery`) with HUD override and battery
+  saver.
+- Runtime frame-time governor (degrade/recover) wired to quality flags.
+- Virtual joystick + logical input layer; keyboard desktop path preserved.
+- Camera profiles per screen class; Brain touch OrbitControls tuning.
+- Safe-area + `100dvh` layout; phone HUD compaction; chat bottom sheet; toast repositioning.
+- Hub render pause behind overlays; progressive effect mount; tier-gated stars/clouds/particles/bloom.
+- Dev perf overlay (`?perf=1`).
+- Playwright mobile touch tests, Brain district test, iPad viewport project.
+
+### Changed
+
+- Portal taglines show on proximity (not hover-only); Lab demo hint always visible on small screens.
+- RiskEngineDemo cores stack on narrow viewports; Factory node tap targets enlarged; Brain empty
+  state visible on mobile.
+- Explorer hint copy corrected (no false “drag to orbit” on hub).
+
 ## [0.1.0] — 2026-07-04
 
 First production-ready release: the complete v1 digital twin (evolution stages 1–4).

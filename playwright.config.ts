@@ -13,8 +13,23 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [
-    { name: 'chromium-desktop', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile', use: { ...devices['Pixel 7'] } },
+    {
+      name: 'chromium-desktop',
+      use: { ...devices['Desktop Chrome'] },
+      testIgnore: ['**/mobile-touch.spec.ts', '**/tablet.spec.ts'],
+    },
+    { name: 'mobile', use: { ...devices['Pixel 7'] }, testIgnore: ['**/tablet.spec.ts'] },
+    {
+      name: 'tablet',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 810, height: 1080 },
+        deviceScaleFactor: 2,
+        isMobile: true,
+        hasTouch: true,
+      },
+      testMatch: '**/tablet.spec.ts',
+    },
   ],
   webServer: {
     command: 'npm run preview',
