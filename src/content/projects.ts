@@ -85,39 +85,6 @@ export const projects: Project[] = [
     sourceRefs: CANONICAL,
   },
   {
-    id: 'risk-engine',
-    name: 'Core Banking Risk Engine',
-    kind: 'systems',
-    period: '2023 – 2024',
-    role: 'Backend / Systems Engineer (remote)',
-    summary:
-      'A parallel risk computation engine for regulated core banking. Five isolated cores each evaluate one risk dimension; a central orchestrator dispatches jobs and normalizes results into a final score — with crash isolation by construction.',
-    problems: [
-      'Heavy risk matrices computed over live transactions with strict correctness.',
-      'One failing evaluator must not poison the pipeline.',
-      'Latency must be predictable for regulated flows.',
-    ],
-    solutions: [
-      'Decomposed evaluation into 5 isolated processing cores: High-Risk Areas, Birthplace, Citizenship, Live Transactions, User Profile.',
-      'Central orchestrator dispatches concurrent worker jobs, tracks independent states, and combines multi-source inputs into a final normalized risk score.',
-      'Pipelines tuned for data consistency, predictable latency, and crash isolation.',
-    ],
-    architecture: [
-      'Ingress → Orchestrator → 5 parallel cores → Aggregation → Normalized risk score',
-    ],
-    tech: ['Node.js', 'Worker processes', 'Job orchestration', 'Concurrency control'],
-    metrics: [
-      { label: 'Cores', value: '5 isolated evaluators' },
-      { label: 'Domain', value: 'Regulated banking' },
-    ],
-    lessons: [
-      'Isolation boundaries are the cheapest reliability you can buy.',
-      'Normalizing heterogeneous signals into one score is a product problem wearing a systems costume.',
-    ],
-    demo: 'risk-engine',
-    sourceRefs: CANONICAL,
-  },
-  {
     id: 'hitobit',
     name: 'Hitobit & Poolkhord',
     kind: 'platform',

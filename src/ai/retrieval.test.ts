@@ -5,7 +5,7 @@ import { isAnswerable, retrieve, tokenize } from './retrieval';
 describe('RAG chunking', () => {
   it('builds a chunk for every content entity', () => {
     const chunks = buildChunks();
-    // 1 profile + 7 experiences + 6 projects + 25 skills + 5 learning + 8 achievements + 6 automations + 6 experiments + 5 notes
+    // 1 profile + 6 experiences + 5 projects + 25 skills + 5 learning + 8 achievements + 5 automations + 6 experiments + 5 notes
     expect(chunks.length).toBeGreaterThanOrEqual(60);
     for (const c of chunks) {
       expect(c.text.length).toBeGreaterThan(30);
@@ -25,7 +25,7 @@ describe('BM25 retrieval — golden question set (docs/AI-EVALUATION.md)', () =>
     ['What is his experience with telemedicine?', 'experience:pezeshket'],
     ['Does he know React Native?', 'skill:react-native'],
     ['What is he currently learning about vector databases?', 'learning:vectordb'],
-    ['Explain the banking risk engine architecture', 'project:risk-engine'],
+    ['What is Nexus Sandbox?', 'project:nexus'],
     ['What was Reqo?', 'project:reqo'],
     ['How does he approach leadership?', 'skill:leadership'],
     ['What is FSRS spaced repetition in VoKaN?', 'experiment:fsrs-model'],

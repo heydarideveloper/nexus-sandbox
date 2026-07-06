@@ -87,8 +87,8 @@ export const skills: SkillNode[] = [
     status: 'advanced',
     level: 88,
     description:
-      'Service-oriented backends, computation-heavy pipelines, parallel workers — the systems half of the profile.',
-    evidence: ['banking', 'jackpot'],
+      'Service-oriented backends, NestJS game engines, SaaS APIs — the systems half of the profile.',
+    evidence: ['jackpot', 'portal'],
     sourceRefs: CANONICAL,
   },
   {
@@ -123,8 +123,8 @@ export const skills: SkillNode[] = [
     status: 'advanced',
     level: 85,
     description:
-      '5-core parallel risk engine with orchestration; Redis distributed locking for race conditions.',
-    evidence: ['banking', 'jackpot'],
+      'Redis distributed locking for concurrent spin race conditions; load-tested WebSocket fan-out at 10K connections.',
+    evidence: ['jackpot'],
     sourceRefs: CANONICAL,
   },
   {
@@ -170,8 +170,8 @@ export const skills: SkillNode[] = [
     status: 'advanced',
     level: 87,
     description:
-      'HLD focus: modular systems, loose coupling, clear data separation, predictable data flows. Server-authoritative and crash-isolated designs shipped.',
-    evidence: ['banking', 'jackpot', 'portal'],
+      'HLD focus: modular systems, loose coupling, clear data separation, predictable data flows. Server-authoritative and multi-tenant designs shipped.',
+    evidence: ['jackpot', 'portal'],
     sourceRefs: CANONICAL,
   },
   {

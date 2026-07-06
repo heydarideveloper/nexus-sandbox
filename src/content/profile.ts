@@ -22,7 +22,7 @@ export const profile: Profile = {
   linkedin: 'https://www.linkedin.com/in/mohammad-heydari-72391a1a1/',
   linkedinHandle: 'mohammad-heydari',
   summary:
-    'Full-Stack Engineer and Tech Lead with over 10 years of experience building and scaling software across FinTech, Blockchain, SaaS, Core Banking, and Telemedicine. Expert in designing high-performance frontend architectures and aligning them with complex backend systems. Experienced in moving products from MVP to high-scale production while focusing on data consistency, system performance, and clear system architecture.',
+    'Full-Stack Engineer and Tech Lead with over 10 years of experience building and scaling software across FinTech, Blockchain, SaaS, and Telemedicine. Expert in designing high-performance frontend architectures and aligning them with complex backend systems. Experienced in moving products from MVP to high-scale production while focusing on data consistency, system performance, and clear system architecture.',
   identityStatement:
     'I design systems, not screens. I take products from first commit to hundreds of thousands of users, across the boundary between frontend and backend, in domains where correctness is non-negotiable — and I never stop learning.',
   leadershipPhilosophy:

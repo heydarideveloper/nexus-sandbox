@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { content, type Project } from '@/content';
 import { Chip, DistrictBody } from './ui';
 import { SlotsDemo } from './demos/SlotsDemo';
-import { RiskEngineDemo } from './demos/RiskEngineDemo';
 import { FsrsDemo } from './demos/FsrsDemo';
 
 const KIND_LABEL: Record<Project['kind'], string> = {
@@ -102,11 +101,6 @@ export default function Lab() {
               {open.demo === 'slots' && (
                 <div className="mt-5">
                   <SlotsDemo />
-                </div>
-              )}
-              {open.demo === 'risk-engine' && (
-                <div className="mt-5">
-                  <RiskEngineDemo />
                 </div>
               )}
               {open.demo === 'fsrs' && (

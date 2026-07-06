@@ -46,10 +46,10 @@ export const achievements: Achievement[] = [
     sourceRefs: CANONICAL,
   },
   {
-    id: 'crash-isolation',
-    title: 'Crash Isolation',
+    id: 'multi-tenant-scale',
+    title: 'Multi-Tenant Scale',
     description:
-      'Five isolated risk cores that fail alone, never together — regulated banking grade.',
+      'SSR/ISR architecture and strict tenant state isolation for 540K+ users at Portal.ir.',
     unlockedBy: 'factory',
     worldEffect: 'The factory pipelines shift to indigo and pulse in sync.',
     sourceRefs: CANONICAL,

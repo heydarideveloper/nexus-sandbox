@@ -109,7 +109,7 @@ export const experiences: Experience[] = [
         facets: ['system-design', 'enterprise'],
       },
       {
-        text: 'Developed a React 19 + Vite frontend with Zustand for rapid slot animations and real-time balance sync driven by server event streams.',
+        text: 'Delivered a React 19 + Vite frontend with Zustand for rapid slot animations and real-time balance sync driven by server event streams.',
         facets: ['frontend', 'startup'],
       },
       {
@@ -185,44 +185,6 @@ export const experiences: Experience[] = [
       'API contracts defined together with backend teams prevent whole classes of integration failures.',
     ],
     tech: ['React', 'Next.js', 'TypeScript', 'SSR/ISR', 'Zustand', 'Node.js'],
-    sourceRefs: CANONICAL,
-  },
-  {
-    id: 'banking',
-    company: 'Core Banking Risk Project',
-    tagline: 'Parallel Risk Computation Engine (Remote)',
-    role: 'Backend / Systems Engineer',
-    period: { from: 2023, to: 2024 },
-    domain: 'Core Banking',
-    theme: { accent: '#818cf8', mood: 'Deep indigo vaults — regulated, isolated, precise.' },
-    metrics: [
-      { label: 'Processing cores', value: '5 isolated' },
-      { label: 'Domain', value: 'Regulated core banking' },
-    ],
-    problems: [
-      'Compute complex risk scores over live financial data with strict correctness requirements.',
-      'One failing check must never take down the whole evaluation pipeline.',
-    ],
-    architecture: [
-      'Node.js parallel risk computation engine for a highly regulated core banking infrastructure.',
-      'Risk matrices split into 5 isolated processing cores: High-Risk Areas, Birthplace, Citizenship, Live Transactions, and User Profile.',
-      'Central orchestrator dispatching concurrent worker jobs, handling independent states, and combining multi-source inputs into a final risk score.',
-    ],
-    bullets: [
-      {
-        text: 'Built a parallel risk computation engine in Node.js with 5 isolated processing cores and a central job orchestrator for regulated core banking.',
-        facets: ['system-design', 'enterprise'],
-      },
-      {
-        text: 'Optimized financial transaction pipelines for data consistency, predictable latency, and crash isolation.',
-        facets: ['system-design', 'enterprise'],
-      },
-    ],
-    lessons: [
-      'Crash isolation is a design input, not an afterthought — independent cores kept one failure from becoming five.',
-      'Predictable latency beats peak throughput in regulated pipelines.',
-    ],
-    tech: ['Node.js', 'Parallel processing', 'Job orchestration', 'Concurrency control'],
     sourceRefs: CANONICAL,
   },
   {
@@ -353,7 +315,7 @@ export const experiences: Experience[] = [
         facets: ['startup', 'frontend'],
       },
       {
-        text: 'Developed RESTful APIs, JWT authentication, and relational schemas in PHP; built and launched native Android prototypes in Java.',
+        text: 'Implemented RESTful APIs, JWT authentication, and relational schemas in PHP; built and launched native Android prototypes in Java.',
         facets: ['system-design'],
       },
       {

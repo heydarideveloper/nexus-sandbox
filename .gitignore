@@ -11,4 +11,4 @@ test-results
 *.tsbuildinfo
 
 # Personal source documents (evidence for docs/PROFILE.md) — keep out of any public remote
-resume/
+/resume/

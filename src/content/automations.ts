@@ -72,22 +72,6 @@ export const automations: Automation[] = [
     sourceRefs: CANONICAL,
   },
   {
-    id: 'risk-orchestrator',
-    name: 'Risk Job Orchestrator',
-    origin: 'Core Banking',
-    description:
-      'Central dispatcher feeding five isolated risk cores, tracking independent job states and combining multi-source results into one normalized score.',
-    stages: [
-      'Ingest transaction',
-      'Dispatch to 5 cores',
-      'Parallel evaluation',
-      'Collect + normalize',
-      'Final risk score',
-    ],
-    cadence: 'Per transaction, real time',
-    sourceRefs: CANONICAL,
-  },
-  {
     id: 'nexus-ci',
     name: 'Nexus Quality Pipeline',
     origin: 'This site',

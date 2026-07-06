@@ -109,9 +109,6 @@ export default function Brain() {
                 );
               })}
             </div>
-            <p className="terminal-text mt-4 text-[10px] text-dim">
-              sources: {selected.sourceRefs.join(', ')}
-            </p>
           </motion.aside>
         ) : (
           <motion.aside

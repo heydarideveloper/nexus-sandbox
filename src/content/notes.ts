@@ -21,9 +21,9 @@ export const engineeringNotes: EngineeringNote[] = [
   },
   {
     id: 'note-crash',
-    title: 'Design for the Crash You Will Have',
+    title: 'Race Conditions Are a Design Problem',
     kind: 'philosophy',
-    body: 'The banking risk engine runs five evaluators as five isolated cores, not five functions in one process. The orchestrator assumes any core can die mid-job. That assumption cost extra plumbing — independent job states, result normalization, dispatch tracking — and it is the reason a single failing evaluator never took down a risk decision. Crash isolation is the cheapest reliability you can buy, but only if you buy it at design time.',
+    body: 'In Jackpot, two concurrent spins on the same wallet are not a bug to patch later — they are a constraint to design against from day one. Redis distributed spin-locks around wallet mutations mean a second spin waits instead of double-spending. The protocol, the lock, and the server-authoritative engine had to agree on what "one spin" means. When money moves in real time, optimistic concurrency is optimism you cannot afford.',
     sourceRefs: CANONICAL,
   },
   {

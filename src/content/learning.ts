@@ -73,10 +73,10 @@ export const learning: LearningItem[] = [
     id: 'distributed',
     label: 'Distributed Systems (deeper)',
     progress: 50,
-    why: 'The risk engine and Redis locking were applied distributed systems; the goal is first-principles depth — consensus, partitioning, and failure models.',
+    why: 'Jackpot Redis locking and Portal scale pushed applied distributed systems; the goal is first-principles depth — consensus, partitioning, and failure models.',
     resources: ['Designing Data-Intensive Applications', 'Jepsen analyses'],
     experiments: [
-      'Crash-isolation and orchestration patterns from the banking engine, re-examined against the literature',
+      'Distributed locking and SSR/ISR caching patterns from production work, re-examined against the literature',
     ],
     futureIdeas: ['Event-sourced variant of the Jackpot wallet ledger'],
     sourceRefs: PROFILE,

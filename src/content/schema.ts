@@ -94,7 +94,7 @@ export const projectSchema = sourcedSchema.extend({
   lessons: z.array(z.string()),
   liveUrl: z.url().optional(),
   /** Which interactive demo the Innovation Lab renders for this project. */
-  demo: z.enum(['slots', 'risk-engine', 'fsrs', 'none']).default('none'),
+  demo: z.enum(['slots', 'fsrs', 'none']).default('none'),
 });
 export type Project = z.infer<typeof projectSchema>;
 
